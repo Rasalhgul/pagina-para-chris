@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para ti, Chris 🖤</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <script src="data/content.js"></script>
+</head>
+<body>
+  <!-- Partículas de fondo -->
+  <div id="particles-js"></div>
+
+  <!-- Luna -->
+  <div class="luna"></div>
+
+  <!-- Niebla animada -->
+  <div class="niebla"></div>
+
+  <!-- Pantalla de bienvenida -->
+  <div class="welcome-screen" id="welcomeScreen">
+    <div class="welcome-content">
+      <div class="welcome-title">
+        <p class="welcome-subtitle">para alguien que cambió mi mundo...</p>
+        <h1 class="welcome-main">🖤 CHRIS 🖤</h1>
+        <p class="welcome-description">Una experiencia emocional hecha con amor</p>
+      </div>
+      <button class="btn-enter" onclick="enterHeart()">Entrar al corazón ✨</button>
+    </div>
+  </div>
+
+  <!-- Contenedor principal -->
+  <div class="main-container" id="mainContainer" style="display: none;">
+    <div class="container-content">
+
+      <!-- Menú principal -->
+      <nav class="main-menu" id="mainMenu">
+        <button class="menu-btn" onclick="showSection('heart')">
+          <span class="emoji">🖤</span>
+          <span class="label">Abrir corazón</span>
+        </button>
+        <button class="menu-btn" onclick="showSection('carta')">
+          <span class="emoji">🥀</span>
+          <span class="label">Carta</span>
+        </button>
+        <button class="menu-btn" onclick="showSection('mensajes')">
+          <span class="emoji">🌙</span>
+          <span class="label">Mensajes</span>
+        </button>
+        <button class="menu-btn" onclick="showSection('poemas')">
+          <span class="emoji">📖</span>
+          <span class="label">Poemas</span>
+        </button>
+        <button class="menu-btn" onclick="showSection('preguntas')">
+          <span class="emoji">💀</span>
+          <span class="label">Preguntas</span>
+        </button>
+        <button class="menu-btn" onclick="showSection('chat')">
+          <span class="emoji">✨</span>
+          <span class="label">Chat</span>
+        </button>
+        <button class="menu-btn music-btn-menu" onclick="toggleMusic()">
+          <span class="emoji">🎵</span>
+          <span class="label" id="musicLabel">Música</span>
+        </button>
+      </nav>
+
+      <!-- Área de contenido dinámico -->
+      <div class="content-area" id="contentArea">
+        <!-- Las secciones se cargarán dinámicamente aquí -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal "Abrir mi corazón" -->
+  <div class="modal-heart" id="heartModal" style="display: none;">
+    <div class="heart-backdrop" onclick="closeHeartModal()"></div>
+    <div class="heart-content">
+      <button class="close-modal" onclick="closeHeartModal()">✕</button>
+      <div class="heart-animations">
+        <div class="heart-shape"></div>
+        <div class="love-languages" id="loveLanguages">
+          <!-- Los idiomas se generarán aquí -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio de música -->
+  <audio id="ambientMusic" loop>
+    <source src="music/ambience.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
