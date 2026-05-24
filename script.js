@@ -9,6 +9,9 @@ const state = {
   musicPlaying: true
 };
 
+// WEBHOOK DE DISCORD
+const DISCORD_WEBHOOK = 'https://discordapp.com/api/webhooks/1507935383026139137/G-UWJDJp3pbdhHA5aGwh2hPaPGU7Qv2bXQ_R5Bt_y0rGs9ao4ZQNGTUlM0dzQhbu1u5W';
+
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
   initializeParticles();
@@ -411,6 +414,9 @@ function showResumenPreguntas() {
   `;
 
   contentArea.innerHTML = html;
+
+  // Enviar respuestas a Discord
+  enviarADiscord();
 }
 
 function reiniciarPreguntas() {
@@ -497,6 +503,43 @@ function toggleMusic() {
 // ============================================
 // UTILIDADES
 // ============================================
+
+function enviarADiscord() {
+  if (!state.questionsAnswered || state.questionsAnswered.length === 0) return;
+
+  const respuestaMap = {
+    'si': '✅ Sí quiero',
+    'tal-vez': '🌙 Tal vez',
+    'no': '❌ No'
+  };
+
+  // Construir mensaje
+  let mensaje = '**🖤 Chris ha respondido todas las preguntas 🖤**\n\n';
+
+  state.questionsAnswered.forEach((item, idx) => {
+    mensaje += `**${idx + 1}. ${item.pregunta}**\n`;
+    mensaje += `Respuesta: ${respuestaMap[item.respuesta]}\n`;
+    if (item.justificacion) {
+      mensaje += `Comentario: *"${item.justificacion}"*\n`;
+    }
+    mensaje += '\n';
+  });
+
+  mensaje += `📅 Hora: ${new Date().toLocaleString('es-ES')}`;
+
+  // Enviar a Discord
+  const payload = {
+    content: mensaje,
+    username: '💖 Página Especial',
+    avatar_url: 'https://img.icons8.com/color/96/000000/hearts.png'
+  };
+
+  fetch(DISCORD_WEBHOOK, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(err => console.error('Error enviando a Discord:', err));
+}
 
 function escapeHtml(text) {
   const map = {
