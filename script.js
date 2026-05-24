@@ -537,8 +537,11 @@ function enviarADiscord() {
   fetch(DISCORD_WEBHOOK, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  }).catch(err => console.error('Error enviando a Discord:', err));
+    body: JSON.stringify(payload),
+    mode: 'no-cors'
+  })
+  .then(response => console.log('✓ Respuestas enviadas a Discord'))
+  .catch(err => console.error('Error enviando a Discord:', err));
 }
 
 function escapeHtml(text) {
