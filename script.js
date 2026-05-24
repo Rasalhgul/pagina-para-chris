@@ -9,11 +9,9 @@ const state = {
   musicPlaying: true
 };
 
-// WEBHOOK DE DISCORD
-const DISCORD_WEBHOOK = 'https://discordapp.com/api/webhooks/1507936638943105265/GyVxEvfTelI8mFsgBRP1c0kiMCJN2Ke7YKnId00BS4GJ8Ce5_I4MxylVjYBkXg0N6yLg';
-
-// WEBHOOK SITE (para recibir las respuestas)
-const WEBHOOK_SITE = 'https://webhook.site/0e19a14b-a06d-4b02-b150-6a9c06301e9e';
+// GOOGLE FORM ID
+const GOOGLE_FORM_ID = '1FAIpQLScqQs3XWJtZn_RNRJxvdP3DJ_LXbMJNmxuZ2CyDadA5LhBRbQ';
+const GOOGLE_FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLScqQs3XWJtZn_RNRJxvdP3DJ_LXbMJNmxuZ2CyDadA5LhBRbQ/formResponse';
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
@@ -52,6 +50,9 @@ function initializeParticles() {
       }
     });
   }
+
+  // Crear pétalos animados
+  crearPetalos();
 }
 
 function initializeAudio() {
@@ -63,6 +64,29 @@ function initializeAudio() {
       document.body.removeEventListener('click', playAudio);
     }, { once: true });
   }
+}
+
+function crearPetalos() {
+  const container = document.getElementById('petalosContainer');
+  if (!container) return;
+
+  setInterval(() => {
+    const petal = document.createElement('div');
+    petal.className = 'petal';
+    petal.textContent = '🌹';
+
+    const x = Math.random() * 100;
+    const duration = 8 + Math.random() * 4;
+
+    petal.style.left = x + '%';
+    petal.style.top = '-50px';
+    petal.style.setProperty('--x', (Math.random() - 0.5) * 100 + 'px');
+    petal.style.animationDuration = duration + 's';
+
+    container.appendChild(petal);
+
+    setTimeout(() => petal.remove(), duration * 1000);
+  }, 300);
 }
 
 // ============================================
@@ -327,14 +351,20 @@ function showPreguntasSection() {
       </div>
 
       <div class="respuestas-container">
-        <button class="btn-respuesta btn-si" onclick="responderPregunta('si', ${preguntaActual.id})">
-          Sí quiero 🖤
+        <button class="btn-respuesta btn-muy-de-acuerdo" onclick="responderPregunta('muy-de-acuerdo', ${preguntaActual.id})">
+          ✅ Totalmente de acuerdo
         </button>
-        <button class="btn-respuesta btn-tal-vez" onclick="responderPregunta('tal-vez', ${preguntaActual.id})">
-          Tal vez 🌙
+        <button class="btn-respuesta btn-de-acuerdo" onclick="responderPregunta('de-acuerdo', ${preguntaActual.id})">
+          ✔️ De acuerdo
         </button>
-        <button class="btn-respuesta btn-no" onclick="responderPregunta('no', ${preguntaActual.id})">
-          No 💔
+        <button class="btn-respuesta btn-neutral" onclick="responderPregunta('neutral', ${preguntaActual.id})">
+          🤔 Neutral
+        </button>
+        <button class="btn-respuesta btn-en-desacuerdo" onclick="responderPregunta('en-desacuerdo', ${preguntaActual.id})">
+          ❌ En desacuerdo
+        </button>
+        <button class="btn-respuesta btn-muy-en-desacuerdo" onclick="responderPregunta('muy-en-desacuerdo', ${preguntaActual.id})">
+          💔 Totalmente en desacuerdo
         </button>
       </div>
 
@@ -392,9 +422,11 @@ function showResumenPreguntas() {
   const contentArea = document.getElementById('contentArea');
 
   const respuestaMap = {
-    'si': '✅ Sí quiero',
-    'tal-vez': '🌙 Tal vez',
-    'no': '❌ No'
+    'muy-de-acuerdo': '✅ Totalmente de acuerdo',
+    'de-acuerdo': '✔️ De acuerdo',
+    'neutral': '🤔 Neutral',
+    'en-desacuerdo': '❌ En desacuerdo',
+    'muy-en-desacuerdo': '💔 Totalmente en desacuerdo'
   };
 
   const html = `
@@ -418,8 +450,8 @@ function showResumenPreguntas() {
 
   contentArea.innerHTML = html;
 
-  // Enviar respuestas a Discord
-  enviarADiscord();
+  // Enviar respuestas a Google Forms
+  enviarAGoogleForms();
 }
 
 function reiniciarPreguntas() {
@@ -477,6 +509,9 @@ function enviarMensajeChat() {
 
   saveState();
 
+  // Enviar mensaje a Google Forms
+  enviarMensajeAGoogleForms(texto);
+
   // Limpiar input y recargar sección
   input.value = '';
   showChatSection();
@@ -507,63 +542,41 @@ function toggleMusic() {
 // UTILIDADES
 // ============================================
 
-function enviarADiscord() {
+function enviarAGoogleForms() {
   if (!state.questionsAnswered || state.questionsAnswered.length === 0) return;
 
-  const respuestaMap = {
-    'si': '✅ Sí quiero',
-    'tal-vez': '🌙 Tal vez',
-    'no': '❌ No'
-  };
-
-  // Construir mensaje
-  let mensaje = '**🖤 Chris ha respondido todas las preguntas 🖤**\n\n';
-
+  // Enviar cada respuesta a Google Forms
   state.questionsAnswered.forEach((item, idx) => {
-    mensaje += `**${idx + 1}. ${item.pregunta}**\n`;
-    mensaje += `Respuesta: ${respuestaMap[item.respuesta]}\n`;
-    if (item.justificacion) {
-      mensaje += `Comentario: *"${item.justificacion}"*\n`;
-    }
-    mensaje += '\n';
+    // Nota: Google Forms usa entry IDs específicos
+    // Estos varían según el formulario, pero típicamente son:
+    // entry.XXXXX para campos normales
+
+    const formData = new FormData();
+    formData.append('entry.1234567890', item.pregunta); // Pregunta
+    formData.append('entry.1234567891', item.respuesta); // Respuesta
+    formData.append('entry.1234567892', item.justificacion || ''); // Justificación
+
+    fetch(GOOGLE_FORM_ACTION, {
+      method: 'POST',
+      body: formData,
+      mode: 'no-cors'
+    })
+    .then(() => console.log('✓ Respuesta enviada a Google Forms'))
+    .catch(err => console.error('Error en Google Forms:', err));
   });
+}
 
-  mensaje += `📅 Hora: ${new Date().toLocaleString('es-ES')}`;
+function enviarMensajeAGoogleForms(mensaje) {
+  const formData = new FormData();
+  formData.append('entry.1234567893', mensaje); // Campo de mensaje
 
-  // Payload para Discord
-  const discordPayload = {
-    content: mensaje,
-    username: '💖 Página Especial',
-    avatar_url: 'https://img.icons8.com/color/96/000000/hearts.png'
-  };
-
-  // Payload para Webhook.site
-  const webhookPayload = {
-    respuestas: state.questionsAnswered,
-    total: state.questionsAnswered.length,
-    timestamp: new Date().toISOString(),
-    mensaje: mensaje
-  };
-
-  // Enviar a Webhook.site
-  fetch(WEBHOOK_SITE, {
+  fetch(GOOGLE_FORM_ACTION, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(webhookPayload),
+    body: formData,
     mode: 'no-cors'
   })
-  .then(() => console.log('✓ Respuestas enviadas a Webhook.site'))
-  .catch(err => console.error('Error en Webhook.site:', err));
-
-  // Enviar a Discord
-  fetch(DISCORD_WEBHOOK, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(discordPayload),
-    mode: 'no-cors'
-  })
-  .then(() => console.log('✓ Respuestas enviadas a Discord'))
-  .catch(err => console.error('Error en Discord:', err));
+  .then(() => console.log('✓ Mensaje enviado a Google Forms'))
+  .catch(err => console.error('Error enviando mensaje:', err));
 }
 
 function escapeHtml(text) {
