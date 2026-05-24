@@ -12,6 +12,9 @@ const state = {
 // WEBHOOK DE DISCORD
 const DISCORD_WEBHOOK = 'https://discordapp.com/api/webhooks/1507936638943105265/GyVxEvfTelI8mFsgBRP1c0kiMCJN2Ke7YKnId00BS4GJ8Ce5_I4MxylVjYBkXg0N6yLg';
 
+// WEBHOOK SITE (para recibir las respuestas)
+const WEBHOOK_SITE = 'https://webhook.site/0e19a14b-a06d-4b02-b150-6a9c06301e9e';
+
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
   initializeParticles();
@@ -527,21 +530,40 @@ function enviarADiscord() {
 
   mensaje += `📅 Hora: ${new Date().toLocaleString('es-ES')}`;
 
-  // Enviar a Discord
-  const payload = {
+  // Payload para Discord
+  const discordPayload = {
     content: mensaje,
     username: '💖 Página Especial',
     avatar_url: 'https://img.icons8.com/color/96/000000/hearts.png'
   };
 
+  // Payload para Webhook.site
+  const webhookPayload = {
+    respuestas: state.questionsAnswered,
+    total: state.questionsAnswered.length,
+    timestamp: new Date().toISOString(),
+    mensaje: mensaje
+  };
+
+  // Enviar a Webhook.site
+  fetch(WEBHOOK_SITE, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(webhookPayload),
+    mode: 'no-cors'
+  })
+  .then(() => console.log('✓ Respuestas enviadas a Webhook.site'))
+  .catch(err => console.error('Error en Webhook.site:', err));
+
+  // Enviar a Discord
   fetch(DISCORD_WEBHOOK, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(discordPayload),
     mode: 'no-cors'
   })
-  .then(response => console.log('✓ Respuestas enviadas a Discord'))
-  .catch(err => console.error('Error enviando a Discord:', err));
+  .then(() => console.log('✓ Respuestas enviadas a Discord'))
+  .catch(err => console.error('Error en Discord:', err));
 }
 
 function escapeHtml(text) {
