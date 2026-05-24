@@ -10,7 +10,7 @@ const state = {
 };
 
 // WEBHOOK DE DISCORD
-const DISCORD_WEBHOOK = 'https://discordapp.com/api/webhooks/1507935383026139137/G-UWJDJp3pbdhHA5aGwh2hPaPGU7Qv2bXQ_R5Bt_y0rGs9ao4ZQNGTUlM0dzQhbu1u5W';
+const DISCORD_WEBHOOK = 'https://discordapp.com/api/webhooks/1507936638943105265/GyVxEvfTelI8mFsgBRP1c0kiMCJN2Ke7YKnId00BS4GJ8Ce5_I4MxylVjYBkXg0N6yLg';
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
