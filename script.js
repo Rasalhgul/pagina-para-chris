@@ -13,6 +13,9 @@ const state = {
 const GOOGLE_FORM_ID = '1FAIpQLScqQs3XWJtZn_RNRJxvdP3DJ_LXbMJNmxuZ2CyDadA5LhBRbQ';
 const GOOGLE_FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLScqQs3XWJtZn_RNRJxvdP3DJ_LXbMJNmxuZ2CyDadA5LhBRbQ/formResponse';
 
+// FORMSPREE
+const FORMSPREE_URL = 'https://formspree.io/f/mzdwakwd';
+
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
   initializeParticles();
@@ -545,35 +548,60 @@ function toggleMusic() {
 function enviarAGoogleForms() {
   if (!state.questionsAnswered || state.questionsAnswered.length === 0) return;
 
-  // Enviar cada respuesta a Google Forms
-  state.questionsAnswered.forEach((item, idx) => {
-    const formData = new FormData();
-    formData.append('entry.861859825', item.pregunta); // Pregunta
-    formData.append('entry.472895781', item.respuesta); // Respuesta
-    formData.append('entry.2074718755', item.justificacion || ''); // Justificación
+  // Construir mensaje con todas las respuestas
+  let mensaje = '🖤 RESPUESTAS DE CHRIS 🖤\n\n';
 
-    fetch(GOOGLE_FORM_ACTION, {
-      method: 'POST',
-      body: formData,
-      mode: 'no-cors'
-    })
-    .then(() => console.log('✓ Respuesta ' + (idx + 1) + ' enviada a Google Forms'))
-    .catch(err => console.error('Error en Google Forms:', err));
+  state.questionsAnswered.forEach((item, idx) => {
+    mensaje += `${idx + 1}. ${item.pregunta}\n`;
+    mensaje += `   Respuesta: ${item.respuesta}\n`;
+    if (item.justificacion) {
+      mensaje += `   Comentario: ${item.justificacion}\n`;
+    }
+    mensaje += '\n';
   });
+
+  // Enviar a Formspree
+  const datos = {
+    email: 'respuestas@chris.com',
+    message: mensaje,
+    timestamp: new Date().toLocaleString('es-ES'),
+    total_respuestas: state.questionsAnswered.length
+  };
+
+  fetch(FORMSPREE_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(datos)
+  })
+  .then(response => {
+    if (response.ok) {
+      console.log('✓ Respuestas enviadas a Formspree correctamente');
+    }
+  })
+  .catch(err => console.error('Error en Formspree:', err));
 }
 
 function enviarMensajeAGoogleForms(mensaje) {
-  const formData = new FormData();
-  formData.append('entry.861859825', 'Mensaje: ' + mensaje);
-  formData.append('entry.472895781', 'Chat');
-  formData.append('entry.2074718755', new Date().toLocaleString('es-ES'));
+  const datos = {
+    email: 'chat@chris.com',
+    message: 'Chat: ' + mensaje,
+    timestamp: new Date().toLocaleString('es-ES')
+  };
 
-  fetch(GOOGLE_FORM_ACTION, {
+  fetch(FORMSPREE_URL, {
     method: 'POST',
-    body: formData,
-    mode: 'no-cors'
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(datos)
   })
-  .then(() => console.log('✓ Mensaje enviado a Google Forms'))
+  .then(response => {
+    if (response.ok) {
+      console.log('✓ Mensaje enviado a Formspree correctamente');
+    }
+  })
   .catch(err => console.error('Error enviando mensaje:', err));
 }
 
