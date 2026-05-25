@@ -125,52 +125,52 @@ donde crecerás.`
   preguntas: [
     {
       id: 1,
-      texto: "¿Te sientes feliz cuando hablas conmigo?",
+      texto: "¿Mi presencia te trae paz y tranquilidad?",
       tipo: "normal"
     },
     {
       id: 2,
-      texto: "¿Te gustaría seguir creando recuerdos juntos?",
+      texto: "¿Te gustaría que nuestros momentos duren para siempre?",
       tipo: "normal"
     },
     {
       id: 3,
-      texto: "¿Sientes que puedo darte tranquilidad?",
+      texto: "¿Sientes que puedo ser tu refugio en la oscuridad?",
       tipo: "normal"
     },
     {
       id: 4,
-      texto: "¿Crees que nuestra conexión es especial?",
+      texto: "¿Crees que lo que compartimos es extraordinario?",
       tipo: "normal"
     },
     {
       id: 5,
-      texto: "¿Te gustaría seguir conociendo mi mundo?",
+      texto: "¿Te atreverías a explorar más profundamente este viaje conmigo?",
       tipo: "normal"
     },
     {
       id: 6,
-      texto: "¿Hay algo que cambiarías de mí?",
+      texto: "¿Hay algo en mí que desearías que fuera diferente?",
       tipo: "normal"
     },
     {
       id: 7,
-      texto: "¿Sientes que te entiendo profundamente?",
+      texto: "¿Sientes que realmente me conoces en el fondo de tu corazón?",
       tipo: "normal"
     },
     {
       id: 8,
-      texto: "¿Quisieras que fuera más expresivo con mis sentimientos?",
+      texto: "¿Quisieras que revelara más de mis sentimientos ocultos?",
       tipo: "normal"
     },
     {
       id: 9,
-      texto: "¿Podrías comprometerte a intentarlo conmigo?",
+      texto: "¿Estás dispuesto a luchar por esto a pesar de las dificultades?",
       tipo: "normal"
     },
     {
       id: 10,
-      texto: "¿Realmente te gustaría ser mi pareja... o debería seguir mi camino?",
+      texto: "¿Quieres que te ame para siempre... o prefieres que nos separemos?",
       tipo: "final"
     }
   ],
