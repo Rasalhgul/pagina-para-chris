@@ -547,28 +547,26 @@ function enviarAGoogleForms() {
 
   // Enviar cada respuesta a Google Forms
   state.questionsAnswered.forEach((item, idx) => {
-    // Nota: Google Forms usa entry IDs específicos
-    // Estos varían según el formulario, pero típicamente son:
-    // entry.XXXXX para campos normales
-
     const formData = new FormData();
-    formData.append('entry.1234567890', item.pregunta); // Pregunta
-    formData.append('entry.1234567891', item.respuesta); // Respuesta
-    formData.append('entry.1234567892', item.justificacion || ''); // Justificación
+    formData.append('entry.861859825', item.pregunta); // Pregunta
+    formData.append('entry.472895781', item.respuesta); // Respuesta
+    formData.append('entry.2074718755', item.justificacion || ''); // Justificación
 
     fetch(GOOGLE_FORM_ACTION, {
       method: 'POST',
       body: formData,
       mode: 'no-cors'
     })
-    .then(() => console.log('✓ Respuesta enviada a Google Forms'))
+    .then(() => console.log('✓ Respuesta ' + (idx + 1) + ' enviada a Google Forms'))
     .catch(err => console.error('Error en Google Forms:', err));
   });
 }
 
 function enviarMensajeAGoogleForms(mensaje) {
   const formData = new FormData();
-  formData.append('entry.1234567893', mensaje); // Campo de mensaje
+  formData.append('entry.861859825', 'Mensaje: ' + mensaje);
+  formData.append('entry.472895781', 'Chat');
+  formData.append('entry.2074718755', new Date().toLocaleString('es-ES'));
 
   fetch(GOOGLE_FORM_ACTION, {
     method: 'POST',
